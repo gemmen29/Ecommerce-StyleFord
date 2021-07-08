@@ -1,6 +1,3 @@
-# Twitter-Clone
+# Ecommerce-StyleFord
 
-Graduation project with a team from ITI cloning some features from the Twitter website 
-using Web API Core as Backend, 
-Angular Framework as Frontend 
-and Node JS as an external application for chatting
+Ecommerce website with a team using Web API Core as Backend and Angular Framework as Frontend

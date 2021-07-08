@@ -1,0 +1,220 @@
+<h2 class="text-center display-4 font-weight-bold my-5">Products</h2>
+
+<button class="btn btn-primary mb-2 dBAddNewBtn" data-toggle="modal" data-target="#addAndUpdateModel"
+    (click)="openAddProductModal()">
+    New
+</button>
+<table class="table table-bordered table-hover" *ngIf="hasProducts">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Description</th>
+            <th scope="col">Discount</th>
+            <th scope="col">Image</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Category</th>
+            <th scope="col">Color</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let product of allProducts;let i=index">
+            <th scope="row">{{i+(pageSize*(currentPageNumber-1))+1}}</th>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.discount }}%</td>
+            <td>
+                <div class="dashboardImgWrapper">
+                    <img class="img-thumbnail img-fluid w-100" [src]="createImgPath(product.image)"
+                        alt="category image">
+                </div>
+            </td>
+            <td>{{ product.quantity }}</td>
+            <td>{{ product.categoryName }}</td>
+            <td>{{ product.colorName }}</td>
+            <td>
+                <button class="btn btn-success mx-2" data-toggle="modal" data-target="#addAndUpdateModel"
+                    (click)="openUpdateProductModal(product.id)">Update</button>
+                <button class="btn btn-danger mx-2" (click)="openDeleteProductModal(product.id)" data-toggle="modal"
+                    data-target="#deleteModel">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!-- pagination -->
+<nav aria-label="..." *ngIf="hasProducts">
+    <div class="d-inline-block">
+        <ul class="pagination">
+            <li class="page-item" [ngClass]="{disabled:currentPageNumber <=1, cursorNotAllowed:currentPageNumber <=1}">
+                <button class="page-link" [disabled]="currentPageNumber <=1"
+                    (click)="getSelectedPage(currentPageNumber-1)">Previous</button>
+            </li>
+            <li class="page-item" *ngFor='let x of counter(numberOfPages) ;let i = index'
+                [class.active]="currentPageNumber == (i+1)">
+                <a class="page-link" (click)="getSelectedPage(i+1)">{{i+1}} </a>
+            </li>
+            <li class="page-item"
+                [ngClass]="{disabled:currentPageNumber >=numberOfPages, cursorNotAllowed:currentPageNumber >=numberOfPages}">
+                <button class="page-link" [disabled]="currentPageNumber >= numberOfPages"
+                    (click)="getSelectedPage(currentPageNumber+1)">Next</button>
+            </li>
+        </ul>
+    </div>
+    <div class="float-right h5 mr-4 text-secondary">Showing {{currentPageNumber}} of {{numberOfPages}}</div>
+</nav>
+<!-- no items to show alert -->
+<div class="row" *ngIf="!hasProducts">
+    <div class="text-center alert alert-danger col-9 mx-auto">
+        There's no orders to show
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addAndUpdateModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{actionName}} Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="productForm">
+                <div class="modal-body">
+                    <div class="form-group my-3">
+                        <input formControlName="name" type="text" class="form-control" placeholder="Name" name="name"
+                            [class.is-invalid]="formFields.name?.invalid && formFields.name?.touched">
+                        <div *ngIf="formFields.name?.invalid && formFields.name?.touched">
+                            <small class="text-danger" *ngIf="formFields.name?.errors.required">Product Name is
+                                required</small>
+                            <small class="text-danger" *ngIf="formFields.name?.errors.minlength">minimum length is 5
+                                characters</small>
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <input formControlName="price" type="number" class="form-control" placeholder="price"
+                            name="price" [class.is-invalid]="formFields.price?.invalid && formFields.price?.touched">
+                        <div *ngIf="formFields.price?.invalid && formFields.price?.touched">
+                            <small class="text-danger" *ngIf="formFields.price?.errors.required">price is
+                                required</small>
+                            <small class="text-danger" *ngIf="formFields.price?.errors.min">minimum value is 1
+                                dollar</small>
+
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <input formControlName="description" type="text" class="form-control" placeholder="description"
+                            name="description"
+                            [class.is-invalid]="formFields.description?.invalid && formFields.description?.touched">
+                        <div *ngIf="formFields.description?.invalid && formFields.description?.touched">
+                            <small class="text-danger" *ngIf="formFields.description?.errors.required"> Description is
+                                required</small>
+                            <small class="text-danger" *ngIf="formFields.description?.errors.minlength">minimum length
+                                value is 10</small>
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <input formControlName="discount" type="number" class="form-control" placeholder="discount"
+                            name="discount"
+                            [class.is-invalid]="formFields.discount?.invalid && formFields.discount?.touched">
+                        <div *ngIf="formFields.discount?.invalid && formFields.discount?.touched">
+                            <small class="text-danger" *ngIf="formFields.discount?.errors.required">Discount is
+                                required</small>
+                            <small class="text-danger" *ngIf="formFields.discount?.errors.min">minimum value is 5
+                                percent</small>
+
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <app-upload (onUploadFinished)="uploadFinished($event)"></app-upload>
+                    </div>
+                    <div class="form-group my-3">
+                        <input formControlName="quantity" type="number" class="form-control" placeholder="quantity"
+                            name="quantity"
+                            [class.is-invalid]="formFields.quantity?.invalid && formFields.quantity?.touched">
+                        <div *ngIf="formFields.quantity?.invalid && formFields.quantity?.touched">
+                            <small class="text-danger" *ngIf="formFields.quantity?.errors.required"> quantity is
+                                required</small>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group my-3">
+                        <select class="form-control" formControlName="categoryId">
+                            <option selected> Category</option>
+                            <option value="{{category.id}}" *ngFor="let category of allCategories">
+                                {{category.name}}
+                            </option>
+                        </select>
+                        <div *ngIf="formFields.categoryId?.invalid && formFields.categoryId?.touched">
+                            <small class="text-danger" *ngIf="formFields.categoryId?.errors.required">Category is
+                                required</small>
+                        </div>
+                    </div> -->
+                    <div class="form-group my-3">
+                        <select class="custom-select" formControlName="categoryId"
+                            [class.is-invalid]="formFields.categoryId.touched && (formFields.categoryId.value === 'Select Category' || formFields.categoryId.value === '')">
+                            <option selected>
+                                Select Category
+                            </option>
+                            <option value="{{category.id}}" *ngFor="let category of allCategories">
+                                {{category.name}}
+                            </option>
+                        </select>
+                        <div
+                            *ngIf="formFields.categoryId.touched && (formFields.categoryId.value === 'Select Category' || formFields.categoryId.value === '') ">
+                            <small class="text-danger"
+                                *ngIf="formFields.categoryId.value === '' || formFields.categoryId.value === 'Select Category' || formFields.categoryId.errors.required ">This
+                                Field is required</small>
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <select class="custom-select" formControlName="colorId"
+                            [class.is-invalid]="formFields.colorId.touched && (formFields.colorId.value === 'Select Color' || formFields.colorId.value === '')">
+                            <option selected>
+                                Select Color
+                            </option>
+                            <option value="{{color.id}}" *ngFor="let color of allColors">
+                                {{color.name}}
+                            </option>
+                        </select>
+                        <div
+                            *ngIf="formFields.colorId.touched && (formFields.colorId.value === 'Select Color' || formFields.colorId.value === '')">
+                            <small class="text-danger"
+                                *ngIf="formFields.colorId.value === '' || formFields.colorId.value === 'Select Color' || formFields.colorId.errors.required ">This
+                                Field is required</small>
+                        </div>
+                    </div>
+
+
+                    <!-- <div class="form-group my-3">
+                        <select class="form-control" formControlName="colorId">
+                            <option selected> Color</option>
+                            <option value="{{color.id}}" *ngFor="let color of allColors">
+                                {{color.name}}
+                            </option>
+                        </select>
+                        <div *ngIf="formFields.colorId?.invalid && formFields.colorId?.touched">
+                            <small class="text-danger" *ngIf="formFields.colorId?.errors.required">Color is
+                                required</small>
+                        </div>
+                    </div>
+                    {{formFields.colorId?.errors}}
+                </div> -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            #addOrUpdateModelCloseBtn>Close</button>
+                        <button [disabled]="productForm.invalid || loading 
+                    || formFields.colorId.value === 'Select Color' ||
+                    formFields.categoryId.value === 'Select Category'" type="submit" class="btn btn-primary"
+                            (click)="onAddOrUpdateSubmit()">
+                            {{actionName}} </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<app-confirm-modal></app-confirm-modal>

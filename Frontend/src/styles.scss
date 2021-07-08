@@ -1,0 +1,162 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
+@import '~ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
+@import "~bootstrap/scss/bootstrap";
+.dBAddNewBtn
+{
+  font-size: 1.3rem;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+.dashboardImgWrapper{
+  max-width: 12.5rem;
+  margin: 0 auto;
+}
+a, button {cursor: pointer;}
+.cursorNotAllowed{cursor: not-allowed;}
+.cursorPointer{cursor: pointer;}
+
+*{ 
+  box-sizing: border-box;
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;  
+}
+body,html {
+  width: 100%;
+  font-family: Poppins, sans-serif, Montserrat;
+  //overflow: hidden;
+  overflow-x: hidden !important;
+}
+
+a {color: #999;}
+a:hover {color: #b48619;}
+a:focus {color: #b48619;}
+.my_p {color: #777;font-size: 14px;}
+.my_h {color: #b48619;}
+i {cursor: pointer;}
+.new_arrivals .my_p,
+.sections .my_p,
+.testimonials p {width: 50%;}
+
+.main_color {color: #b48619;}
+.second_color {color: #777;}
+
+/**************************************************
+***************** End my library ******************
+***************************************************/
+
+
+
+
+
+
+/*--------------------------------------------------
+----------- Start overriding bootstrab -------------
+----------------------------------------------------*/
+.client {
+  a:hover {text-decoration: none;}
+
+  .navbar {
+    background: rgb(0, 0, 0, 1);
+    color: #fff;
+    z-index: 9999;
+  }
+
+  .navbar-dark .navbar-nav .nav-link:hover,
+  .navbar-dark .navbar-nav .active > .nav-link {color: #b48619; border-bottom: 1px solid #b48619; }
+  .navbar-brand span {color: #b48619;}
+
+  .navbar-collapse {font-size: 12px;}
+
+  .navbar-dark .navbar-nav .nav-link {color: #fff;}
+
+  .form-control:focus {box-shadow: none;}
+
+
+  .card {background: none;}
+
+  .carousel-indicators li {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  //product
+  .productImgWrapper{height: 16rem;}
+}
+
+// Media query
+//=========================
+
+/* XS screen */
+@media(max-width: 576px) {
+  p,
+  .footer .copyright  {font-size: 10px;}
+  .my_h {font-size: 20px;}
+  .new_arrivals .my_p,
+  .sections .my_p,
+  .testimonials p {width: 75%; font-size: 10px;}
+
+  .navbar-dark .navbar-nav .nav-link:hover,
+  .navbar-dark .navbar-nav .active > .nav-link { border-bottom: none;}
+
+  .header-top {font-size: 10px;}
+
+  .navbar, .navbar-brand, .navbar-toggler, .navbar-collapse {font-size: 12px;}
+
+  .carousel .carousel-item .text {top: 80px; right: 40px;}
+  .carousel .carousel-item .text p:nth-child(1) {font-size: 8px;}
+  .carousel .carousel-item .text p:nth-child(2) {font-size: 15px;}
+  .carousel .carousel-item .text p:nth-child(3) {font-size: 8px; letter-spacing: 3px;}
+  .carousel .carousel-item .text button {padding: 5px 15px; font-size: 8px;}
+  
+}
+
+/* Mobile screen */
+@media(min-width: 577px) and (max-width: 767px) {
+  .my_p {font-size: 10px;}
+  .my_h {font-size: 20px;}
+
+  .navbar-dark .navbar-nav .nav-link:hover,
+  .navbar-dark .navbar-nav .active > .nav-link { border-bottom: none;}
+
+  .navbar, .navbar-brand, .navbar-toggler, .navbar-collapse {font-size: 12px;}
+
+  .carousel .carousel-item .text {top: 80px; right: 40px;}
+  .carousel .carousel-item .text p:nth-child(1) {font-size: 8px;}
+  .carousel .carousel-item .text p:nth-child(2) {font-size: 15px;}
+  .carousel .carousel-item .text p:nth-child(3) {font-size: 8px; letter-spacing: 3px;}
+  .carousel .carousel-item .text button {padding: 5px 15px; font-size: 8px;}
+
+  
+}
+
+
+
+/* Small screen */
+@media(min-width: 768px) and (max-width: 991px) {
+  .my_p {font-size: 10px;}
+  .my_h {font-size: 20px;}
+
+  .navbar-dark .navbar-nav .nav-link:hover,
+  .navbar-dark .navbar-nav .active > .nav-link { border-bottom: none;}
+  
+  .navbar, .navbar-brand, .navbar-toggler,.navbar-collapse {font-size: 12px;}
+  
+}
+
+
+/* Medium screen */
+@media(min-width: 992px) and (max-width: 1199px) {
+   
+}
+
+
+/* Large screen */
+@media(min-width: 1200px) {
+   
+}
+

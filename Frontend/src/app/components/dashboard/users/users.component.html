@@ -1,0 +1,128 @@
+<h2 class="text-center display-4 font-weight-bold my-5">Users</h2>
+<button class="btn btn-primary mb-2 dBAddNewBtn" data-toggle="modal" data-target="#addAndUpdateModel" (click)="openAddUserModal()">
+    New
+</button>
+<table class="table table-bordered table-hover" *ngIf="hasUsers">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">User Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of allUsers;let i=index">
+            <th scope="row">{{i+(pageSize*(currentPageNumber-1))+1}}</th>
+            <td>{{ user.userName }}</td>
+            <td>
+                <button class="btn btn-success mx-2" data-toggle="modal" data-target="#addAndUpdateModel" (click)="openUpdateUserModal(user.id)">Update</button>
+                <button class="btn btn-danger mx-2" (click)="openDeleteUserModal(user.id)" data-toggle="modal" data-target="#deleteModel">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!-- pagination -->
+<nav aria-label="..." *ngIf="hasUsers">
+    <div class="d-inline-block">
+        <ul class="pagination">
+            <li class="page-item" [ngClass]="{disabled:currentPageNumber <=1, cursorNotAllowed:currentPageNumber <=1}">
+                <button class="page-link " [disabled]="currentPageNumber <=1 " (click)="getSelectedPage(currentPageNumber-1)">Previous</button>
+            </li>
+            <li class="page-item" *ngFor='let x of counter(numberOfPages) ;let i = index' [class.active]="currentPageNumber==(i+1)">
+                <a class="page-link" (click)="getSelectedPage(i+1)">{{i+1}} </a>
+            </li>
+            <li class="page-item" [ngClass]="{disabled:currentPageNumber>=numberOfPages, cursorNotAllowed:currentPageNumber >=numberOfPages}">
+                <button class="page-link" [disabled]="currentPageNumber >= numberOfPages" (click)="getSelectedPage(currentPageNumber+1)">Next</button>
+            </li>
+        </ul>
+    </div>
+    <div class="float-right h5 mr-4 text-secondary">Showing {{currentPageNumber}} of {{numberOfPages}}</div>
+</nav>
+<!-- no items to show -->
+<div class="row" *ngIf="!hasUsers">
+    <div class="text-center alert alert-danger col-9 mx-auto">
+        There's no orders to show
+    </div>
+</div>
+
+<div class="modal fade" id="addAndUpdateModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{actionName}} Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="registerForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input formControlName="username" type="text" class="form-control" placeholder="User Name" name="username" [class.is-invalid]="formFields.username?.invalid && formFields.username?.touched">
+                        <div *ngIf="formFields.username?.invalid && formFields.username?.touched">
+                            <small class="text-danger" *ngIf="formFields.username?.errors.required">User Name is required</small>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="actionName != 'Update'">
+                        <label for="password">Password</label>
+                        <input formControlName="password" type="password" class="form-control" placeholder="Password" name="password" [class.is-invalid]="formFields.password?.invalid && formFields.password?.touched">
+                        <div *ngIf="formFields.password?.invalid && formFields.password?.touched">
+                            <small class="text-danger" *ngIf="formFields.password?.errors.required">Password is required</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input formControlName="email" type="email" class="form-control" placeholder="Email" name="email" [class.is-invalid]="formFields.email?.invalid && formFields.email?.touched">
+                        <div *ngIf="formFields.email?.invalid && formFields.email?.touched">
+                            <small class="text-danger" *ngIf="formFields.email?.errors.required">Email is required</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input formControlName="firstName" type="text" class="form-control" placeholder="First Name" name="firstName" [class.is-invalid]="formFields.firstName?.invalid && formFields.firstName?.touched">
+                        <div *ngIf="formFields.firstName?.invalid && formFields.firstName?.touched">
+                            <small class="text-danger" *ngIf="formFields.firstName?.errors.required">First Name is required</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input formControlName="lastName" type="text" class="form-control" placeholder="Last Name" name="lastName" [class.is-invalid]="formFields.lastName?.invalid && formFields.lastName?.touched">
+                        <div *ngIf="formFields.lastName?.invalid && formFields.lastName?.touched">
+                            <small class="text-danger" *ngIf="formFields.lastName?.errors.required">Last Name is required</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <select class="custom-select" formControlName="gender" [class.is-invalid]="formFields.gender.touched && (formFields.gender.value === 'Select Gender' || formFields.gender.value === '')">
+                            <option selected>
+                                Select Gender
+                            </option>
+                            <option *ngFor="let gen of genderList">{{gen}}
+                            </option>
+                        </select>
+                        <div *ngIf="formFields.gender.touched && (formFields.gender.value === 'Select Gender' || formFields.gender.value === '') ">
+                            <small class="text-danger" *ngIf="formFields.gender.value === '' || formFields.gender.value === 'Select Gender' || formFields.gender.errors.required ">This Field is required</small>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="actionName != 'Update'">
+                        <select class="custom-select" formControlName="role" [class.is-invalid]="formFields.role.touched && (formFields.role.value === 'Select Role' || formFields.role.value === '')">
+                            <option selected>
+                                Select Role
+                            </option>
+                            <option *ngFor="let role of roles">{{role}}
+                            </option>
+                        </select>
+                        <div *ngIf="formFields.role.touched && (formFields.role.value === 'Select Role' || formFields.role.value === '') ">
+                            <small class="text-danger" *ngIf="formFields.role.value === '' || formFields.role.value === 'Select Role' || formFields.role.errors.required ">This Field is required</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" #addOrUpdateModelCloseBtn>Close</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="loading" (click)="onAddOrUpdateSubmit()">
+                        {{actionName}} </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<app-confirm-modal></app-confirm-modal>
